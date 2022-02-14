@@ -1,0 +1,33 @@
+.secondary {
+	color: $secondaryTxt;
+}
+
+
+// eyebrow ------------------------------------------------
+
+.eyebrow {
+	margin-bottom: 0.5em;
+	font-size: 0.875em;
+	font-weight: 400;
+	color: $secondaryTxt;
+}
+
+
+// title --------------------------------------------------
+
+.title {
+	margin-top: 0;
+	font-size: 1.25em;
+	font-weight: 400;
+}
+
+.title:first-child {
+	margin-top: 0;
+}
+
+
+// --------------------------------------------------------
+
+p {
+	line-height: 1.5em;
+}

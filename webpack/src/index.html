@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>A Flitting Atlas of the Human Gaze</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+
+body {
+	font-family: 'Source Sans Pro', sans-serif;
+}
+.loader {
+	position: fixed;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	left: 0;
+	color: #ffffff;
+	background: #404040;
+	z-index: +9;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+.loader .inner {
+	margin: 0 auto;
+	padding: 0.5em 1.5em;
+	width: 30em;
+}
+.eyebrow {
+	margin-bottom: 0.5em;
+	font-size: 0.875em;
+	font-weight: 400;
+	color: #929292;
+}
+.title {
+	margin-top: 0;
+	font-size: 1.5em;
+	font-weight: 600;
+}
+
+.title:first-child {
+	margin-top: 0;
+}
+p {
+	line-height: 1.5em;
+}
+#toggle::before { 
+ 	background-image: url('./public/toggle-sprite.png');
+}
+</style>
+</head>
+<body>
+
+
+<section id="loader" class="loader">
+	<div class="inner">
+		<p class="eyebrow">Curatorial A(i)gents</p>
+		<h1 class="title">A Flitting Atlas of the Human Gaze</h1>
+		<p>When the Harvard Art Museum collection looks back at us, which direction does it look? Do particular media or cultural traditions correlate with preferences regarding the directionality of the human gaze?</p>
+		<div class="progress">
+			<div class="progress_bar"></div>
+		</div>
+	</div>
+</section>
+
+
+<div class="columns">
+	<div class="column_nav">
+		<nav class="nav">
+			<div class="nav_toggle">
+				<div class="tab-menu">
+				  <input type="radio" name="toggle" value="gaze" id="gaze-view" checked />
+				  <label for="gaze-view"><svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 22 22"><defs><style>.cls-1{fill:#fff;fill-rule:evenodd;}</style></defs><path class="cls-1" d="M11,6.54C6.12,6.54,3,11.19,3,11.19s3.18,4.27,8,4.27S19,11,19,11,15.78,6.54,11,6.54ZM11,14.92A3.92,3.92,0,1,1,14.92,11,3.91,3.91,0,0,1,11,14.92Z"/></svg></label>
+				  <input type="radio" name="toggle" value="dist" id="dist-view" />
+				  <label for="dist-view"><svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 22 22"><defs><style>.cls-1{fill:#fff;fill-rule:evenodd;}</style></defs><path class="cls-1" d="M4.1,8.74A.88.88,0,1,0,5,9.62.87.87,0,0,0,4.1,8.74Z"/><path class="cls-1" d="M7.55,8.74a.88.88,0,1,0,0,1.76.88.88,0,1,0,0-1.76Z"/><path class="cls-1" d="M11,8.74a.88.88,0,1,0,.88.88A.88.88,0,0,0,11,8.74Z"/><path class="cls-1" d="M14.45,8.74a.88.88,0,1,0,.88.88A.88.88,0,0,0,14.45,8.74Z"/><path class="cls-1" d="M7.55,6a.88.88,0,0,0,0,1.76A.88.88,0,0,0,7.55,6Z"/><path class="cls-1" d="M11,6a.88.88,0,1,0,.88.88A.88.88,0,0,0,11,6Z"/><path class="cls-1" d="M11,3.22a.88.88,0,1,0,.88.88A.88.88,0,0,0,11,3.22Z"/><path class="cls-1" d="M7.55,11.5a.88.88,0,1,0,.88.88A.88.88,0,0,0,7.55,11.5Z"/><path class="cls-1" d="M11,11.5a.88.88,0,1,0,.88.88A.89.89,0,0,0,11,11.5Z"/><path class="cls-1" d="M14.45,11.5a.88.88,0,0,0,0,1.76.88.88,0,1,0,0-1.76Z"/><path class="cls-1" d="M17.9,11.5a.88.88,0,1,0,.88.88A.88.88,0,0,0,17.9,11.5Z"/><path class="cls-1" d="M7.55,14.26a.88.88,0,1,0,.88.88A.88.88,0,0,0,7.55,14.26Z"/><path class="cls-1" d="M11,14.26a.88.88,0,1,0,.88.88A.89.89,0,0,0,11,14.26Z"/><path class="cls-1" d="M14.45,14.26a.88.88,0,0,0,0,1.76.88.88,0,1,0,0-1.76Z"/><path class="cls-1" d="M11,17a.88.88,0,1,0,.88.87A.88.88,0,0,0,11,17Z"/></svg></label>
+				</div>	
+			</div>
+			<div id="filter" class="nav_filter"></div>
+		</nav>
+	</div>
+	<div class="column_primary">
+		<div id="widget"></div>
+	</div>
+	<div class="column_secondary">
+		<div id="result"></div>
+	</div>
+</div>	
+
+
+</body>
+</html>

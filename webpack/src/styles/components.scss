@@ -1,0 +1,196 @@
+
+
+// progress bar -------------------------------------------
+
+.progress {
+	margin-top: 2em;
+	display: flex;
+	align-items: center;
+	color: $secondaryTxt;
+	// background: $secondaryTxt;
+}
+
+.progress_bar {
+	width: 0;
+	height: 0.625em;
+	border-radius: 0.3125em;
+	background: currentColor;
+}
+
+
+// nav filter ---------------------------------------------
+
+.nav_filter {
+	display: inline-block;
+}
+
+
+// tabmenu ------------------------------------------------
+
+.tab-menu {
+	display: inline-block;
+	border-radius: .875em;
+	margin: 0;
+	padding: 0.0625em;
+	list-style: none;
+	width: auto;
+	height: 1.625em;	
+	border-radius: 0.753m;
+	background: rgb(255,255,255);
+	font-size: 0.75em;
+	line-height: 1.5em;
+}
+
+.tab-menu svg {
+	width: 1.5em;
+	height: 1.5em;
+}
+
+.tab-menu input {
+	display: none;
+}
+
+.tab-menu label {
+	display: block;
+	float: left;
+	width: 1.5em;
+	height: 1.5em;
+	color: $primaryTxt;
+	border-radius: 0.75em;
+	background: rgba(0,0,0,0.2);
+}
+
+.tab-menu label:not(:first-of-type) {
+	margin-left: 0.0625em;
+}
+
+.tab-menu input:checked + label {
+	background: rgba(0,0,0,1);
+}
+
+.tab-menu .tab {
+	margin-bottom: 0.5em;
+	padding: 0 1em;
+	color: $primaryBg;
+	display: inline-block;
+	text-transform: uppercase;
+	-webkit-touch-callout: none;
+	    -webkit-user-select: none;
+	     -khtml-user-select: none;
+	       -moz-user-select: none;
+	        -ms-user-select: none;
+	            user-select: none; 	
+}
+
+.tab-menu .tab:first-of-type {
+	border-radius: 0.75em 0 0 0.75em;
+}
+.tab-menu .tab:last-of-type {
+	border-radius: 0 0.75em 0.75em 0 ;
+}
+
+.tab-menu .tab:hover {
+	color: $primaryTxt;
+	background: $dataFocus;
+}
+
+.tab-menu .tab.active {
+	color: $primaryTxt;
+	background: $primaryBg;
+}
+
+.nav_filter .tab-menu {
+	display: block;
+	background: transparent;
+	.tab {
+		display: block;
+		color: $primaryTxt;
+		border-radius: 1.5em;
+	}
+}
+
+
+// gaze finder --------------------------------------------
+
+.gazefinder {
+	position:relative;
+	padding-bottom: 100%;
+}
+
+#img {
+	position: absolute;
+	z-index: -1;
+	top: 0;
+	left: 0;
+	box-sizing: border-box;
+	width: 100%;
+	height: 100%;
+}
+
+#img > img {
+  object-fit: cover;
+  border-radius: 50%;
+  height: 100%;
+  width: 100%;
+}
+
+#img > img:not([src]) {
+   visibility: hidden;
+}
+
+#cursor{
+	position: absolute;
+	z-index: +1;
+	top: -6.25em;
+	left: -6.25em;
+	background: rgba(255,0,0,0.2);
+	border: 1px solid red;
+	box-sizing: border-box;
+	width: 0.1875em;
+	height: 0.1875em;
+	margin-left: -0.09375em;
+	margin-top: -0.09375em;
+	pointer-events: none;
+}
+
+#cursor::after{
+	content: "";
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	width: 0.125em;
+	height: 0.125em;
+	background: red;
+}
+
+
+// face ---------------------------------------------------
+
+.face {
+	position: relative;
+	float: left;
+	margin: 0.25em;
+	border-radius: 50%;
+	width: 4em;
+	height: 4em;
+	font-size: 0.5em;
+	color: red;
+}
+
+.face:hover {
+	z-index: +9;
+}
+
+.face .face-img {
+	position: absolute;
+  object-fit: cover;
+  border-radius: 50%;
+  height: 4em;
+  width: 4em;
+	background: red;
+}
+
+.face-caption {
+	display: none;
+}
+

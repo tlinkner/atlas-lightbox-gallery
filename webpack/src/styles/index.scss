@@ -1,0 +1,33 @@
+
+
+// variables
+$primaryBg: #000000;
+$primaryTxt: #FFFFFF;
+$secondaryBg: #404040;
+$secondaryTxt: #929292;
+$data: #FFFFFF;
+$dataFocus: #FF0000;
+$vizWidth: 960px;
+$vizHeight: 540px;
+$leftMargin: 2.5em;
+$minWidth: 720px;
+
+$navHeight: 2.1875em;
+
+body {
+	// font-size: 14px;
+	// font-size: 72px;
+	font-size: 2.22vh;
+}
+
+
+// includes
+@import 'layout';
+@import 'typography';
+@import 'components';
+
+
+
+
+
+

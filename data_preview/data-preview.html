@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Data Preview</title>
+<style>
+
+body {
+	margin: 0;
+}
+
+img {
+	margin: 0.25em;
+	float: left;
+	width: 200px;
+	height: 200px;
+	object-fit: cover;
+}        
+
+</style>
+</head>
+<body>
+
+<div id="plot"></div>
+
+<script src="../webpack/node_modules/d3/dist/d3.min.js"></script>
+<script>
+
+const plot = d3.select("#plot");
+	
+d3.csv("../webpack/public/data/temp_data.csv").then(rawdata=>{
+	const data = rawdata.map(d=>{
+		d.pitch = +d.pitch;
+		d.yaw = +d.yaw;
+		d.roll = +d.roll;
+		d.manual_pitch = +d.manual_pitch;
+		d.manual_yaw = +d.manual_yaw;
+		return d;
+	});
+
+	const images = plot.selectAll(".img")
+		.data(data)
+		.enter()
+		.append("img")
+		.attr("src",d=>`../webpack/public/img/${d.imageid}.jpg`)
+
+})
+
+</script>
+</body>
+</html>

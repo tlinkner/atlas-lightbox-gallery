@@ -1,0 +1,92 @@
+// reset --------------------------------------------------
+
+* {
+	box-sizing: border-box;
+}
+
+// fix variable scrollbars
+html { 
+	overflow-y: hidden; 
+}
+
+body {
+	margin: 3em 1.5em;
+	font-family: 'IBM Plex Sans', sans-serif;
+	color: $data;
+	background-color: $secondaryBg;
+}
+
+
+// header -------------------------------------------------
+
+.header {
+	margin-bottom: 1.5em;
+	margin-left: 0;
+}
+
+
+// nav ----------------------------------------------------
+
+.nav {
+	z-index: +9;
+	margin-bottom: 1.5em;
+	flex-direction: row;
+}
+
+.nav_toggle {
+	margin-bottom: 0.5em;
+}
+
+.nav_filter {
+	margin-left: 0;
+}
+
+
+
+
+// columns ------------------------------------------------
+
+.columns {
+	display: flex;
+	flex-direction: column;
+	flex-direction: row;
+}
+
+.column_nav {
+	flex: 0.5;
+}
+
+.column_primary {
+	margin-bottom: 1.5em;
+	flex: 1;
+}
+
+.column_secondary {
+	padding-left: 1em;
+	flex: 0.5;
+}
+
+
+// widget -------------------------------------------------
+
+#widget {
+	position: relative;
+	padding-bottom: 100%;
+}
+
+#gaze {
+	position: absolute;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	left: 0;
+}
+
+#dist {
+	position: absolute;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	left: 0;
+}
+
