@@ -18,9 +18,24 @@ img {
 	object-fit: cover;
 }        
 
+#download {
+	margin: 1em 0;
+}
+
+canvas {
+	margin: 2px;
+	border: 2px solid #fff;
+}
+
+canvas.override {
+	border: 2px solid magenta;
+}
+
 </style>
 </head>
 <body>
+
+<button id="download">Download</button>
 
 <div id="plot"></div>
 
@@ -29,23 +44,176 @@ img {
 
 const plot = d3.select("#plot");
 	
-d3.csv("../webpack/public/data/temp_data.csv").then(rawdata=>{
-	const data = rawdata.map(d=>{
-		d.pitch = +d.pitch;
-		d.yaw = +d.yaw;
-		d.roll = +d.roll;
-		d.manual_pitch = +d.manual_pitch;
-		d.manual_yaw = +d.manual_yaw;
-		return d;
+d3.csv("../webpack/public/data/temp_data.csv", parseData).then(data=>{
+
+	console.log(data);
+
+	const imageObjs = [];
+
+    data.slice(0,100).forEach(d => {
+        const obj = new Pic(plot,d);
+		// yaw = x, pitch = y
+        obj.makeImg(d.yaw,d.pitch,d.override);   
+        imageObjs.push(obj);
+    });
+
+	const download = document.getElementById('download');
+
+	download.addEventListener('click', function (e) {
+		imageObjs.forEach(d=>{
+			d.downLoadImg();
+		})
 	});
 
-	const images = plot.selectAll(".img")
-		.data(data)
-		.enter()
-		.append("img")
-		.attr("src",d=>`../webpack/public/img/${d.imageid}.jpg`)
-
 })
+
+
+function parseData(d){
+	let p, y;
+	let o = ''; // o = manual override
+	if (+d.manual_pitch != 0){
+		p = +d.manual_pitch;
+		o = 'override';
+	} else {
+		p = +d.pitch;
+	}
+	if (+d.manual_yaw != 0){
+		y = +d.manual_yaw;
+	} else {
+		y = +d.yaw;
+	}
+
+	return {
+		rowid: d.rowid,
+		imageid: d.imageid,
+		url: d.url,
+		pitch: p,
+		yaw: y,
+		override: o,
+		object_id: d.object_id,
+		object_title: d.object_title,
+		object_classification: d.object_classification,
+		object_department: d.object_department,
+		object_division: d.object_division,
+		object_artist: d.object_artist,
+		object_century: d.object_century,
+		object_datebegin: d.object_datebegin,
+		object_culture: d.object_culture,
+		object_provenance: d.object_provenance,
+		object_dimensions: d.object_dimensions,
+		object_medium: d.object_medium,
+		object_technique: d.object_technique,
+		object_accessionyear: +d.object_accessionyear
+	};
+}
+
+
+class Pic {
+    constructor(rootDom, datum) {
+        this.rootDom = rootDom;
+		this.rowId = datum.rowid;
+        this.picId = datum.imageid;
+		this.picUrl = `../webpack/public/img/${this.picId}.jpg`;
+        this.fname = `${datum.rowid}_${datum.imageid}.png`;
+        this.canvas = this.rootDom.append("canvas")
+            .attr("width",200)
+            .attr("height",200)
+			.attr("id",this.rowId)
+			.attr("class",datum.override);
+		// this.i = this.rootDom.append("img").attr("src",this.picUrl);
+    }
+
+    makeImg(yaw,pitch,o) {
+
+		// yaw = x, pitch = y
+        const context = this.canvas.node().getContext("2d");
+        const base_image = new Image();
+        base_image.src = this.picUrl;
+
+        base_image.onload = function(){
+
+			const yOffset = 0;
+			const scaleX = d3.scaleLinear().domain([-180,180]).range([-100, 300]);
+			const scaleY = d3.scaleLinear().domain([-90,90]).range([300, -100]);
+
+			const sourceW = base_image.width;
+			const sourceH = base_image.height;
+			const destW = 200 
+			const scaleFactor = destW/sourceW;
+			const destH = sourceH * scaleFactor;
+			context.drawImage(base_image,0,0,destW,destH);
+
+			context.beginPath()
+			context.fillStyle = 'lime';
+			context.arc(100, 100 + yOffset, 3, 0, 2 * Math.PI)
+			context.fill();
+
+			context.beginPath();
+			context.strokeStyle = "rgba(0, 255, 0, 0.5)";
+			context.moveTo(0,100 + yOffset);
+			context.lineTo(200,100 + yOffset);
+			context.stroke();
+
+			// for (let i=0; i<10; i++){
+			// 	const yPos = i * (200/10);
+			// 	context.beginPath();
+			// 	context.strokeStyle = "rgba(0, 255, 0, 0.5)";
+			// 	context.moveTo(0,yPos + yOffset);
+			// 	context.lineTo(200,yPos + yOffset);
+			// 	context.stroke();
+			// }
+
+			context.beginPath();
+			context.strokeStyle = "rgba(0, 255, 0, 0.5)";
+			context.moveTo(100,0);
+			context.lineTo(100,200);
+			context.stroke();
+
+			// for (let i=0; i<10; i++){
+			// 	const xPos = i * (200/10);
+			// 	context.beginPath();
+			// 	context.strokeStyle = "rgba(0, 255, 0, 0.5)";
+			// 	context.moveTo(xPos,0);
+			// 	context.lineTo(xPos,200);
+			// 	context.stroke();
+			// }
+
+			context.beginPath();
+			context.strokeStyle = "magenta";
+			context.moveTo(100,100 + yOffset);
+			context.lineTo(scaleX(yaw),scaleY(pitch) + yOffset);
+			context.stroke();
+			context.beginPath()
+			context.fillStyle = 'magenta';
+			context.arc(scaleX(yaw), scaleY(pitch) + yOffset, 3, 0, 2 * Math.PI)
+			context.fill();
+
+			context.beginPath()
+			context.fillStyle = 'lime';
+			context.font = "12px Verdana";
+			context.fillText(`yaw:  ${yaw}`, 5, 20);
+
+			context.beginPath()
+			context.fillStyle = 'lime';
+			context.font = "12px Verdana";
+			context.fillText(`pitch:${pitch}`, 5, 35);
+			
+			context.beginPath()
+			context.fillStyle = 'lime';
+			context.font = "12px Verdana";
+			context.fillText(o, 5, 50);
+
+		}
+    }
+
+    downLoadImg(){
+        const link = document.createElement('a');
+        link.download = this.fname;
+        link.href = this.canvas.node().toDataURL();
+        link.click();
+        link.delete;
+    }
+}
 
 </script>
 </body>
