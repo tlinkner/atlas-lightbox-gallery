@@ -35,7 +35,7 @@ canvas.override {
 </head>
 <body>
 
-<button id="download">Download</button>
+<button id="download">Download <span id="msg"></span></button>
 
 <div id="plot"></div>
 
@@ -45,23 +45,28 @@ canvas.override {
 const plot = d3.select("#plot");
 	
 d3.csv("../webpack/public/data/temp_data.csv", parseData).then(data=>{
-
 	console.log(data);
 
-	const imageObjs = [];
+	const imageObjs = []; // array for image objects
 
-    data.slice(0,100).forEach(d => {
+    data.forEach(d => {
         const obj = new Pic(plot,d);
-		// yaw = x, pitch = y
-        obj.makeImg(d.yaw,d.pitch,d.override);   
+        obj.makeImg();   
         imageObjs.push(obj);
     });
 
+	const msg = d3.select("#msg");
+	const msgString = " " + data[0].rowid + " - " + data[data.length-1].rowid;
+	msg.text(msgString);
+
 	const download = document.getElementById('download');
 
-	download.addEventListener('click', function (e) {
-		imageObjs.forEach(d=>{
-			d.downLoadImg();
+	download.addEventListener('click', function(e) {
+		imageObjs.forEach((d,i)=>{
+			setTimeout(function(){
+				imageObjs[i].downLoadImg();
+			},
+			500 * i);
 		})
 	});
 
@@ -69,27 +74,14 @@ d3.csv("../webpack/public/data/temp_data.csv", parseData).then(data=>{
 
 
 function parseData(d){
-	let p, y;
-	let o = ''; // o = manual override
-	if (+d.manual_pitch != 0){
-		p = +d.manual_pitch;
-		o = 'override';
-	} else {
-		p = +d.pitch;
-	}
-	if (+d.manual_yaw != 0){
-		y = +d.manual_yaw;
-	} else {
-		y = +d.yaw;
-	}
-
 	return {
 		rowid: d.rowid,
 		imageid: d.imageid,
 		url: d.url,
-		pitch: p,
-		yaw: y,
-		override: o,
+		pitch: +d.pitch,
+		manual_pitch: +d.manual_pitch,
+		yaw: +d.yaw,
+		manual_yaw: +d.manual_yaw,
 		object_id: d.object_id,
 		object_title: d.object_title,
 		object_classification: d.object_classification,
@@ -111,21 +103,18 @@ function parseData(d){
 class Pic {
     constructor(rootDom, datum) {
         this.rootDom = rootDom;
-		this.rowId = datum.rowid;
-        this.picId = datum.imageid;
-		this.picUrl = `../webpack/public/img/${this.picId}.jpg`;
+		this.datum = datum;
+		this.picUrl = `../webpack/public/img/${datum.imageid}.jpg`;
         this.fname = `${datum.rowid}_${datum.imageid}.png`;
         this.canvas = this.rootDom.append("canvas")
             .attr("width",200)
             .attr("height",200)
-			.attr("id",this.rowId)
-			.attr("class",datum.override);
-		// this.i = this.rootDom.append("img").attr("src",this.picUrl);
+			.attr("id",datum.rowid);
     }
 
-    makeImg(yaw,pitch,o) {
-
+    makeImg() {
 		// yaw = x, pitch = y
+		const d = this.datum;
         const context = this.canvas.node().getContext("2d");
         const base_image = new Image();
         base_image.src = this.picUrl;
@@ -143,65 +132,78 @@ class Pic {
 			const destH = sourceH * scaleFactor;
 			context.drawImage(base_image,0,0,destW,destH);
 
+			// ai text yaw
+			context.beginPath()
+			context.fillStyle = 'magenta';
+			context.font = "12px Verdana";
+			context.fillText(`ai yaw:  ${d.yaw}`, 5, 20);
+
+			// ai text pitch
+			context.beginPath()
+			context.fillStyle = 'magenta';
+			context.font = "12px Verdana";
+			context.fillText(`ai pitch:${d.pitch}`, 5, 35);
+
+			// manual text
+			if(d.manual_pitch + d.manual_yaw !== 0) {
+				// manual text yaw
+				context.beginPath()
+				context.fillStyle = 'aqua';
+				context.font = "12px Verdana";
+				context.fillText(`manual yaw:  ${d.manual_yaw}`, 5, 180);
+
+				// manual text pitch
+				context.beginPath()
+				context.fillStyle = 'aqua';
+				context.font = "12px Verdana";
+				context.fillText(`manual pitch:${d.manual_pitch}`, 5, 195);
+			}
+
+			// center reference dot
 			context.beginPath()
 			context.fillStyle = 'lime';
 			context.arc(100, 100 + yOffset, 3, 0, 2 * Math.PI)
 			context.fill();
 
+			// horizontal reference line
 			context.beginPath();
 			context.strokeStyle = "rgba(0, 255, 0, 0.5)";
 			context.moveTo(0,100 + yOffset);
 			context.lineTo(200,100 + yOffset);
 			context.stroke();
 
-			// for (let i=0; i<10; i++){
-			// 	const yPos = i * (200/10);
-			// 	context.beginPath();
-			// 	context.strokeStyle = "rgba(0, 255, 0, 0.5)";
-			// 	context.moveTo(0,yPos + yOffset);
-			// 	context.lineTo(200,yPos + yOffset);
-			// 	context.stroke();
-			// }
-
+			// vertical reference line
 			context.beginPath();
 			context.strokeStyle = "rgba(0, 255, 0, 0.5)";
 			context.moveTo(100,0);
 			context.lineTo(100,200);
 			context.stroke();
 
-			// for (let i=0; i<10; i++){
-			// 	const xPos = i * (200/10);
-			// 	context.beginPath();
-			// 	context.strokeStyle = "rgba(0, 255, 0, 0.5)";
-			// 	context.moveTo(xPos,0);
-			// 	context.lineTo(xPos,200);
-			// 	context.stroke();
-			// }
-
+			// ai pitch and yaw
 			context.beginPath();
 			context.strokeStyle = "magenta";
 			context.moveTo(100,100 + yOffset);
-			context.lineTo(scaleX(yaw),scaleY(pitch) + yOffset);
+			context.lineTo(scaleX(d.yaw),scaleY(d.pitch) + yOffset);
 			context.stroke();
 			context.beginPath()
 			context.fillStyle = 'magenta';
-			context.arc(scaleX(yaw), scaleY(pitch) + yOffset, 3, 0, 2 * Math.PI)
+			context.arc(scaleX(d.yaw), scaleY(d.pitch) + yOffset, 3, 0, 2 * Math.PI)
 			context.fill();
 
-			context.beginPath()
-			context.fillStyle = 'lime';
-			context.font = "12px Verdana";
-			context.fillText(`yaw:  ${yaw}`, 5, 20);
+			// manual pitch and yaw
+			if(d.manual_pitch + d.manual_yaw !== 0) {
+				context.beginPath();
+				context.strokeStyle = "aqua";
+				context.moveTo(100,100 + yOffset);
+				context.lineTo(scaleX(d.manual_yaw),scaleY(d.manual_pitch) + yOffset);
+				context.stroke();
+				context.beginPath()
+				context.fillStyle = 'aqua';
+				context.arc(scaleX(d.manual_yaw), scaleY(d.manual_pitch) + yOffset, 3, 0, 2 * Math.PI)
+				context.fill();
+			}
 
-			context.beginPath()
-			context.fillStyle = 'lime';
-			context.font = "12px Verdana";
-			context.fillText(`pitch:${pitch}`, 5, 35);
-			
-			context.beginPath()
-			context.fillStyle = 'lime';
-			context.font = "12px Verdana";
-			context.fillText(o, 5, 50);
+
 
 		}
     }
