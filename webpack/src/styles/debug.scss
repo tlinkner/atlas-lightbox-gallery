@@ -1,0 +1,26 @@
+body::before {
+	display: block;
+	content: '';
+	position: absolute;
+	left: 0;
+	right: 0;
+	top: 33.33%;
+	height: 1px;
+	background: lime;
+}
+
+body::after {
+	display: block;
+	content: '';
+	position: absolute;
+	left: 0;
+	right: 0;
+	top: 66.66%;
+	height: 1px;
+	background: lime;
+}
+
+#widget {
+	border: 1px solid red;
+}
+

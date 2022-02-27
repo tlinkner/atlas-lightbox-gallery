@@ -361,7 +361,9 @@ function renderBinContents(data, images){
 
 	const rootDOM = d3.select('#result');
 
-	const unpackedData = data.map(d=>d[2])
+	const unpackedData = data.map(d=>d[2]).slice(0,180);
+
+
 
 	// update
 	const container = rootDOM.selectAll('#unpackedBin')
@@ -491,10 +493,6 @@ function renderGaze(data, images){
 	}
 
 	function setImage(imgDOM,cursorDOM,yaw,pitch,data,images){
-
-
-
-
 		let localData = getByYawPitch(cursorDOM,yaw,pitch,data);
 		let i = getRandom(localData,1)[0];
 		let iObj = images.filter(d=>d.imageid === i.imageid)[0].imageobj;

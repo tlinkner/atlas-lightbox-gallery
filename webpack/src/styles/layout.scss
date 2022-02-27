@@ -10,7 +10,7 @@ html {
 }
 
 body {
-	margin: 3em 1.5em;
+	margin: 1em 1.5em;
 	font-family: 'IBM Plex Sans', sans-serif;
 	color: $data;
 	background-color: $secondaryBg;
@@ -53,17 +53,18 @@ body {
 }
 
 .column_nav {
-	flex: 0.5;
+	flex: 0.48;
 }
 
 .column_primary {
-	margin-bottom: 1.5em;
+	padding: 2em 0.25em;
+	// margin-bottom: 1.5em;
 	flex: 1;
 }
 
 .column_secondary {
 	padding-left: 1em;
-	flex: 0.5;
+	flex: 0.48;
 }
 
 
@@ -88,5 +89,22 @@ body {
 	right: 0;
 	bottom: 0;
 	left: 0;
+}
+
+
+// lightbox layout classes
+// https://harvardartmuseums.github.io/lightbox-toolkit/
+// 5760 x 3240
+
+.valign {
+	display: flex;
+	align-items: center;
+}
+
+.valign > div, .valign > nav {
+	padding: 0;
+	margin: 0;
+	box-sizing: border-box;
+	min-height: 30%;
 }
 
